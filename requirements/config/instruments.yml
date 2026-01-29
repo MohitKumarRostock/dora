@@ -1,0 +1,88 @@
+# Requirements library sources (bilingual EN/DE)
+# Keep EN as canonical text; DE is pilot display language.
+# Add source_url + retrieved_at when you download from EUR-Lex.
+
+instruments:
+  - code: DORA_2022_2554
+    title: "Regulation (EU) 2022/2554 (DORA)"
+    celex: "32022R2554"
+    eli: "http://data.europa.eu/eli/reg/2022/2554/oj"
+    versions:
+      - lang: en
+        path: requirements/sources/DORA_2022_2554__EN.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+      - lang: de
+        path: requirements/sources/DORA_2022_2554__DE.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+
+  - code: EU_2024_1772
+    title: "Delegated Regulation (EU) 2024/1772 (RTS incident classification/materiality)"
+    celex: ""
+    eli: ""
+    versions:
+      - lang: en
+        path: requirements/sources/EU_2024_1772_RTS_incident_classification__EN.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+      - lang: de
+        path: requirements/sources/EU_2024_1772_RTS_incident_classification__DE.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+
+  - code: EU_2024_1773
+    title: "Delegated Regulation (EU) 2024/1773 (RTS policy content for ICT contractual arrangements)"
+    celex: ""
+    eli: ""
+    versions:
+      - lang: en
+        path: requirements/sources/EU_2024_1773_RTS_policy_contractual_arrangements__EN.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+      - lang: de
+        path: requirements/sources/EU_2024_1773_RTS_policy_contractual_arrangements__DE.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+
+  - code: EU_2024_2956
+    title: "Implementing Regulation (EU) 2024/2956 (ITS Register of Information templates)"
+    celex: ""
+    eli: ""
+    versions:
+      - lang: en
+        path: requirements/sources/EU_2024_2956_ITS_RoI_templates__EN.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+      - lang: de
+        path: requirements/sources/EU_2024_2956_ITS_RoI_templates__DE.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+
+  - code: EU_2025_301
+    title: "Delegated Regulation (EU) 2025/301 (RTS incident reporting content and time limits)"
+    celex: ""
+    eli: ""
+    versions:
+      - lang: en
+        path: requirements/sources/EU_2025_301_RTS_reporting_time_limits__EN.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+      - lang: de
+        path: requirements/sources/EU_2025_301_RTS_reporting_time_limits__DE.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+
+  - code: EU_2025_302
+    title: "Implementing Regulation (EU) 2025/302 (ITS incident reporting templates/procedures)"
+    celex: ""
+    eli: ""
+    versions:
+      - lang: en
+        path: requirements/sources/EU_2025_302_ITS_reporting_templates__EN.pdf
+        source_url: ""
+        retrieved_at_utc: ""
+      - lang: de
+        path: requirements/sources/EU_2025_302_ITS_reporting_templates__DE.pdf
+        source_url: ""
+        retrieved_at_utc: ""

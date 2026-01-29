@@ -1,0 +1,110 @@
+# Controlled vocabulary for evidence types.
+# Keep these stable; requirements must only reference types listed here.
+
+evidence_types:
+  - code: POLICY
+    label_de: "Richtlinie / Policy"
+    label_en: "Policy"
+    definition_de: "Verbindliche, genehmigte Richtlinie oder Rahmenwerk (z. B. ICT-Risk Policy, TPRM Policy)."
+    definition_en: "Approved policy or framework document (e.g., ICT risk policy, TPRM policy)."
+    examples:
+      - "ICT Risk Management Policy (approved PDF)"
+      - "Third-Party Risk Management Policy (Confluence page w/ approval record)"
+
+  - code: PROCEDURE_RUNBOOK
+    label_de: "Prozess / Runbook"
+    label_en: "Procedure / Runbook"
+    definition_de: "Detaillierter Ablauf/Arbeitsanweisung (Incident Runbook, RoI Pflegeprozess)."
+    definition_en: "Step-by-step operational procedure or runbook."
+    examples:
+      - "Incident escalation runbook"
+      - "RoI maintenance SOP"
+
+  - code: REGISTER_INVENTORY
+    label_de: "Register / Inventar"
+    label_en: "Register / Inventory"
+    definition_de: "Strukturiertes Register oder Inventar (RoI, Vendor Inventory, Service Catalog)."
+    definition_en: "Structured register or inventory (RoI, vendor inventory, service catalog)."
+    examples:
+      - "RoI export using EU 2024/2956 template"
+      - "Vendor inventory spreadsheet"
+
+  - code: CONTRACT_CLAUSE
+    label_de: "Vertrag / Vertragsklausel"
+    label_en: "Contract / Clause"
+    definition_de: "Vertragliche Dokumente/Klauseln (MSA/SLA/DPA, Audit-Rechte, Exit-Klauseln)."
+    definition_en: "Contractual documents/clauses (MSA/SLA/DPA, audit rights, exit clauses)."
+    examples:
+      - "MSA + SLA annex"
+      - "Audit rights clause excerpt"
+
+  - code: RISK_ASSESSMENT
+    label_de: "Risikobewertung"
+    label_en: "Risk assessment"
+    definition_de: "Dokumentierte Bewertung (Criticality, Konzentrationsrisiko, inherent/residual risk)."
+    definition_en: "Documented risk assessment (criticality, concentration, inherent/residual risk)."
+    examples:
+      - "Criticality assessment for cloud provider"
+      - "Concentration risk assessment memo"
+
+  - code: DUE_DILIGENCE
+    label_de: "Due Diligence"
+    label_en: "Due diligence"
+    definition_de: "Prüfunterlagen vor/bei Beauftragung (Questionnaires, SOC/ISO Reports, Assessments)."
+    definition_en: "Pre-contract or onboarding due diligence pack."
+    examples:
+      - "SOC 2 report + review notes"
+      - "Vendor security questionnaire"
+
+  - code: MONITORING_REVIEW
+    label_de: "Monitoring / Review"
+    label_en: "Monitoring / Review"
+    definition_de: "Laufende Überwachung und Reviews (SLA Reports, QBR minutes, issue logs)."
+    definition_en: "Ongoing monitoring artefacts (reports, review minutes, issue tracking)."
+    examples:
+      - "Quarterly vendor review minutes"
+      - "SLA/KPI monthly report"
+
+  - code: EXIT_BCP_DR
+    label_de: "Exit / BCP / DR"
+    label_en: "Exit / BCP / DR"
+    definition_de: "Exit-Pläne und Business Continuity/Disaster Recovery Nachweise."
+    definition_en: "Exit strategy and business continuity / disaster recovery evidence."
+    examples:
+      - "Exit plan for critical ICT service"
+      - "DR plan + last DR test summary"
+
+  - code: INCIDENT_RECORD
+    label_de: "Incident Record"
+    label_en: "Incident record"
+    definition_de: "Incident Ticket/Log inkl. Timeline, Klassifikation, Freigaben."
+    definition_en: "Incident ticket/log including timeline, classification and approvals."
+    examples:
+      - "ServiceNow incident ticket"
+      - "Jira incident epic with severity fields"
+
+  - code: POSTMORTEM
+    label_de: "Postmortem / RCA"
+    label_en: "Postmortem / RCA"
+    definition_de: "Root Cause Analysis, Lessons Learned, corrective actions."
+    definition_en: "Root cause analysis, lessons learned, corrective action plan."
+    examples:
+      - "RCA report + action tracker"
+
+  - code: TEST_EVIDENCE
+    label_de: "Testnachweise"
+    label_en: "Test evidence"
+    definition_de: "Übungen/Tests (Tabletop, DR tests) und Ergebnisberichte."
+    definition_en: "Testing artefacts and reports (tabletop, DR tests)."
+    examples:
+      - "Incident tabletop exercise report"
+      - "BCP/DR annual test report"
+
+  - code: TRAINING_ATTESTATION
+    label_de: "Training / Attestation"
+    label_en: "Training / Attestation"
+    definition_de: "Schulungsnachweise, attestierte Kontrollen, Sign-offs."
+    definition_en: "Training completion, attestations, approvals/sign-offs."
+    examples:
+      - "DORA awareness training completion report"
+      - "Management approval record for policy"
