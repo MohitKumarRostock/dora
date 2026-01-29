@@ -1,0 +1,12 @@
+# Python caches
+__pycache__/
+
+#MacOS files
+.DS_Store
+# Virtual environments
+venv/
+
+# Generated artifacts
+*.npz
+*.parquet
+*.joblib
