@@ -35,8 +35,8 @@ ARTICLE_PAT_FALLBACK_EN = re.compile(r"(?i)(?:^|\n)\s*article\s+(\d+)\b")
 
 
 POINT_PAT = re.compile(r"(?m)^\s*\(\s*([a-z])\s*\)\s+")
-PARA_PAT  = re.compile(r"(?m)^\s*\(\s*(\d+)\s*\)\s+")
 
+PARA_PAT = re.compile(r"(?m)^\s*(?:\(\s*(\d+)\s*\)|(\d+)\.)\s+")
 
 def extract_pdf_text(pdf_path: Path) -> str:
     parts = []
@@ -69,21 +69,56 @@ def split_articles(text: str, lang: str):
     return out
 
 
-def split_paragraphs(art_block: str):
-    # remove the first line "Article N" / "Artikel N" so paragraph parsing works
+def split_by_blank_lines(body: str):
+    # Split on empty lines (most reliable separator when numbering is missing)
+    parts = [p.strip() for p in re.split(r"\n\s*\n+", body) if p.strip()]
+    # If PDF has no empty lines, fallback to “hard line breaks” that look like new paragraphs
+    if len(parts) <= 1:
+        parts = [p.strip() for p in re.split(r"\n(?=[A-ZÄÖÜ])", body) if p.strip()]
+    return parts
+
+
+
+EXPECTED_MIN_PARAS = {
+    19: 2,  # we at least need (1) and (2)
+    30: 3,  # we at least need (1)(2)(3)
+}
+
+def split_paragraphs(art_block: str, art_no: int):
     lines = art_block.splitlines()
     body = "\n".join(lines[1:]).strip() if len(lines) > 1 else ""
+
+    # Drop title lines until paragraph marker appears (common in EU regs)
+    body_lines = body.splitlines()
+    while body_lines and not re.match(r"^\s*(?:\(\s*\d+\s*\)|\d+\.)\s+", body_lines[0]):
+        body_lines = body_lines[1:]
+    body = "\n".join(body_lines).strip()
+
     paras = list(PARA_PAT.finditer(body))
-    if not paras:
-        return [("1", body)] if body else []
-    out = []
-    for i, m in enumerate(paras):
-        pno = m.group(1)
-        start = m.start()
-        end = paras[i+1].start() if i+1 < len(paras) else len(body)
-        ptxt = body[start:end].strip()
-        out.append((pno, ptxt))
-    return out
+
+    # normal path: numbering detected
+    if len(paras) >= 2:
+        out = []
+        for i, m in enumerate(paras):
+            pno = m.group(1) or m.group(2)
+            start = m.start()
+            end = paras[i+1].start() if i+1 < len(paras) else len(body)
+            out.append((pno, body[start:end].strip()))
+        # If article is known to have more paragraphs but numbering is incomplete, fallback
+        exp = EXPECTED_MIN_PARAS.get(art_no)
+        if exp and len(out) < exp:
+            parts = split_by_blank_lines(body)
+            if len(parts) >= exp:
+                return [(str(i+1), parts[i]) for i in range(len(parts))]
+        return out
+
+    # fallback path: numbering missing → split by blank lines / hard breaks
+    parts = split_by_blank_lines(body)
+    if len(parts) >= 2:
+        return [(str(i+1), parts[i]) for i in range(len(parts))]
+
+    return [("1", body)] if body else []
+
 
 def split_points(paragraph_text: str):
     pts = list(POINT_PAT.finditer(paragraph_text))
@@ -109,7 +144,7 @@ def emit_segments(instrument_code: str, lang: str, text: str, source_sha256: str
             allowed = INCLUDE_ARTICLES.get(instrument_code)
             if allowed is not None and art_int not in allowed:
                 continue
-            paras = split_paragraphs(art_block)
+            paras = split_paragraphs(art_block, int(art_no))
             for pno, ptxt in paras:
                 legal_ref = f"Art. {art_no}({pno})"
                 rec = {
