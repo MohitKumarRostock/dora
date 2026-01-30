@@ -1,6 +1,10 @@
 {
-  "requirements_count": 140,
+  "version": "v0_1",
+  "qc_mode": "en_canonical",
+  "requirements_count": 114,
   "audit_questions_count": 20,
   "errors_count": 0,
-  "errors_preview": []
+  "warnings_count": 0,
+  "errors_preview": [],
+  "warnings_preview": []
 }

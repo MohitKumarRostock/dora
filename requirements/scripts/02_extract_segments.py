@@ -2,6 +2,18 @@ import re, json, yaml
 from pathlib import Path
 import pdfplumber
 import pandas as pd
+from bs4 import BeautifulSoup
+
+import csv
+
+def load_manifest_by_path(path: str):
+    m = {}
+    with open(path, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            m[row["file_path"]] = row["sha256"]
+    return m
+
+
 
 def normalize_text(s: str) -> str:
     s = s.replace("\u00ad", "")              # soft hyphen
@@ -38,6 +50,22 @@ POINT_PAT = re.compile(r"(?m)^\s*\(\s*([a-z])\s*\)\s+")
 
 PARA_PAT = re.compile(r"(?m)^\s*(?:\(\s*(\d+)\s*\)|(\d+)\.)\s+")
 
+def extract_html_text(html_path: Path) -> str:
+    raw = html_path.read_text(encoding="utf-8", errors="ignore")
+
+    # EUR-Lex often serves XHTML (XML). Detect and parse accordingly.
+    if raw.lstrip().startswith("<?xml") or "<xhtml" in raw[:2000].lower():
+        soup = BeautifulSoup(raw, "lxml-xml")   # XML parser
+    else:
+        soup = BeautifulSoup(raw, "lxml")       # HTML parser
+
+    for t in soup(["script", "style", "noscript"]):
+        t.decompose()
+
+    text = soup.get_text("\n")
+    return normalize_text(text)
+
+
 def extract_pdf_text(pdf_path: Path) -> str:
     parts = []
     with pdfplumber.open(str(pdf_path)) as p:
@@ -46,6 +74,14 @@ def extract_pdf_text(pdf_path: Path) -> str:
             if t.strip():
                 parts.append(t)
     return normalize_text("\n".join(parts))
+
+def extract_source_text(path: Path) -> str:
+    if path.suffix.lower() == ".pdf":
+        return extract_pdf_text(path)
+    if path.suffix.lower() in (".html", ".htm"):
+        return extract_html_text(path)
+    raise ValueError(f"Unsupported source type: {path}")
+
 
 
 
@@ -171,7 +207,7 @@ def get_sha(manifest: pd.DataFrame, instrument_code: str, lang: str) -> str:
 
 def main():
     cfg = yaml.safe_load(Path("requirements/config/instruments.yml").read_text(encoding="utf-8"))
-    manifest = pd.read_csv("requirements/library/sources_manifest__v0_1.csv")
+    manifest_by_path = load_manifest_by_path("requirements/library/sources_manifest__v0_1.csv")
 
     out_en = Path("requirements/extracted/segments__EN.jsonl")
     out_de = Path("requirements/extracted/segments__DE.jsonl")
@@ -183,8 +219,11 @@ def main():
         for v in inst["versions"]:
             lang = v["lang"]
             pdf_path = Path(v["path"])
-            sha = get_sha(manifest, inst["code"], lang)
-            text = extract_pdf_text(pdf_path)
+            src_path = Path(v["path"])
+            sha = manifest_by_path.get(str(src_path))
+            if not sha:
+                raise KeyError(f"No sha256 for primary file_path={src_path} in sources_manifest__v0_1.csv")
+            text = extract_source_text(pdf_path)
             out_path = out_en if lang == "en" else out_de
             count = emit_segments(inst["code"], lang, text, sha, out_path)
             print(f"{inst['code']} {lang}: {count} segments")
